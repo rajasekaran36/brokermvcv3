@@ -22,19 +22,23 @@ public class TradeDaoImpl implements TradeDao {
 
     public List<Trade> getTradesByCustomerId(String customerID) {
         List<Trade> customerSpecificTrades = new ArrayList<Trade>();
-        for (Trade aTrade : getallTrades()) {
-            if (aTrade.getCustomerId().equals(customerID))
-                customerSpecificTrades.add(aTrade);
-        }
+        
+        getallTrades().forEach((trade)->{
+            if(trade.getCustomerId().equals(customerID))
+            customerSpecificTrades.add(trade);
+        });
+        
         return customerSpecificTrades;
     }
 
     public List<Trade> getTradesBySymbol(String symbol) {
         List<Trade> symbolSpecificTrades = new ArrayList<Trade>();
-        for (Trade aTrade : getallTrades()) {
-            if (aTrade.getSymbol().equals(symbol))
-                symbolSpecificTrades.add(aTrade);
-        }
+        
+        getallTrades().forEach((trade)->{
+            if(trade.getSymbol().equals(symbol))
+                symbolSpecificTrades.add(trade);
+        });
+
         return symbolSpecificTrades;
     }
 
@@ -84,9 +88,7 @@ public class TradeDaoImpl implements TradeDao {
     public HashMap<String, List<Trade>> getTradeGroups(List<Trade> customerTrades) {;
         HashMap<String, List<Trade>> map = new HashMap<String,List<Trade>>();
         customerTrades.forEach((Trade trade)->map.put(trade.getSymbol(),null));
-        for(String key:map.keySet()){
-            map.put(key,getTrades(customerTrades.get(0).getCustomerId(),key));
-        }
+        map.forEach((key,trades)->{map.put(key,getTrades(customerTrades.get(0).getCustomerId(),key));});
         return map;
     }
 

@@ -21,8 +21,10 @@ public class App
         //CITIBNPPARIA
         HashMap<String,List<Trade>> groups = td.getTradeGroups(td.getTradesByCustomerId("CITIBNPPARIA"));
 
-        for(String key:groups.keySet()){
+        groups.forEach((key,trades)->{displayTrades(trades);});
+
+        /* for(String key:groups.keySet()){
             displayTrades(groups.get(key));
-        }
+        } */
     }
 }
