@@ -1,19 +1,15 @@
 package com.kgisl.brokermvc;
 
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.HashMap;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 
 public class Test{
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, CsvValidationException{
 
         TradeDao td = new TradeDaoImpl();
         td.loadTradeInfoFromFile("resources/tradefile-1.csv");
@@ -23,5 +19,10 @@ public class Test{
         //System.out.println(ss.length+" "+cusp.length);
         Stream.of(cusp).forEach(t->System.out.println(t.toString()));
         //s.forEach(System.out::println);
+        CSVReader cr = new CSVReader(new FileReader("resources/tradefile-1.csv"));
+        String[] words = null;
+        while((words=cr.readNext())!=null){
+            Stream.of(words).forEach(System.out::println);
+        }
     }
 }
