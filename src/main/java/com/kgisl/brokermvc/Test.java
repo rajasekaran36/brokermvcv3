@@ -24,5 +24,6 @@ public class Test{
         while((words=cr.readNext())!=null){
             Stream.of(words).forEach(System.out::println);
         }
+        cr.close();
     }
 }
