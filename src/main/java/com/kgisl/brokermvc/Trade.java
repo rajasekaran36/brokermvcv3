@@ -8,7 +8,7 @@ public class Trade{
     String date;
     Boolean sttEx;
     Boolean gstEx;
-
+    public Trade(){}
     public Trade(String customerId, String symbol, Integer qty, Double rate, String date, Boolean sttEx, Boolean gstEx) {
         this.customerId = customerId;
         this.symbol = symbol;
