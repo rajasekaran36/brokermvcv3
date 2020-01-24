@@ -1,15 +1,10 @@
 package com.kgisl.brokermvc;
-
 import java.util.List;
-import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
     public static void displayTrades(List<Trade> trades){
@@ -74,5 +69,7 @@ public class App
         /* for(String key:groups.keySet()){
             displayTrades(groups.get(key));
         } */
+
+        
     }
 }

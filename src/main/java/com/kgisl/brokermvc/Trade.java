@@ -1,38 +1,71 @@
 package com.kgisl.brokermvc;
 
 public class Trade{
-    String customerId;
-    String symbol;
+    Integer id;
+    String uccCode;
+    String dateAndTime;
+    String scrip;
+    String tradeType; //Single Letter String (Buy->B or Sell->S)
     Integer qty;
     Double rate;
-    String date;
-    Boolean sttEx;
-    Boolean gstEx;
-    public Trade(){}
-    public Trade(String customerId, String symbol, Integer qty, Double rate, String date, Boolean sttEx, Boolean gstEx) {
-        this.customerId = customerId;
-        this.symbol = symbol;
+    String stType; //Single Letter String (Exclusive->E or Inclusive->I)
+    String gstType; //Single Letter String (Exclusive->E or Inclusive->I)
+
+
+    public Trade() {
+    }
+
+
+    public Trade(Integer id, String uccCode, String dateAndTime, String scrip, String tradeType, Integer qty, Double rate, String stType, String gstType) {
+        this.id = id;
+        this.uccCode = uccCode;
+        this.dateAndTime = dateAndTime;
+        this.scrip = scrip;
+        this.tradeType = tradeType;
         this.qty = qty;
         this.rate = rate;
-        this.date = date;
-        this.sttEx = sttEx;
-        this.gstEx = gstEx;
+        this.stType = stType;
+        this.gstType = gstType;
     }
 
-    public String getCustomerId() {
-        return this.customerId;
+    public Integer getId() {
+        return this.id;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getSymbol() {
-        return this.symbol;
+    public String getUccCode() {
+        return this.uccCode;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setUccCode(String uccCode) {
+        this.uccCode = uccCode;
+    }
+
+    public String getDateAndTime() {
+        return this.dateAndTime;
+    }
+
+    public void setDateAndTime(String dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
+
+    public String getScrip() {
+        return this.scrip;
+    }
+
+    public void setScrip(String scrip) {
+        this.scrip = scrip;
+    }
+
+    public String getTradeType() {
+        return this.tradeType;
+    }
+
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
     }
 
     public Integer getQty() {
@@ -51,50 +84,34 @@ public class Trade{
         this.rate = rate;
     }
 
-    public String getDate() {
-        return this.date;
+    public String getStType() {
+        return this.stType;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStType(String stType) {
+        this.stType = stType;
     }
 
-    public Boolean isSttEx() {
-        return this.sttEx;
+    public String getGstType() {
+        return this.gstType;
     }
 
-    public Boolean getSttEx() {
-        return this.sttEx;
-    }
-
-    public void setSttEx(Boolean sttEx) {
-        this.sttEx = sttEx;
-    }
-
-    public Boolean isGstEx() {
-        return this.gstEx;
-    }
-
-    public Boolean getGstEx() {
-        return this.gstEx;
-    }
-
-    public void setGstEx(Boolean gstEx) {
-        this.gstEx = gstEx;
+    public void setGstType(String gstType) {
+        this.gstType = gstType;
     }
 
     @Override
     public String toString() {
         return "{" +
-            " customerId='" + getCustomerId() + "'" +
-            ", symbol='" + getSymbol() + "'" +
+            " id='" + getId() + "'" +
+            ", uccCode='" + getUccCode() + "'" +
+            ", dateAndTime='" + getDateAndTime() + "'" +
+            ", scrip='" + getScrip() + "'" +
+            ", tradeType='" + getTradeType() + "'" +
             ", qty='" + getQty() + "'" +
             ", rate='" + getRate() + "'" +
-            ", date='" + getDate() + "'" +
-            ", sttEx='" + isSttEx() + "'" +
-            ", gstEx='" + isGstEx() + "'" +
+            ", stType='" + getStType() + "'" +
+            ", gstType='" + getGstType() + "'" +
             "}";
-    }
-
-
+        
 }

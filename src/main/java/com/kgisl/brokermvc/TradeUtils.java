@@ -1,5 +1,6 @@
 package com.kgisl.brokermvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,6 +25,20 @@ public class TradeUtils{
             return true;
         else
             return false;
+    }
+
+    public static LocalDateTime convertToLocalDateTime(String data){
+        String[] raw =data.split(" ");
+        String[] date = raw[0].split("/");
+        String[] time = raw[1].split(":");
+        for(int i=0;i<2;i++)
+            if(date[i].length()<2)
+                date[i]="0"+date[i];
+        
+        Integer[] datei = Stream.of(date).map(Integer::parseInt).toArray(Integer[]::new);
+        Integer[] timei = Stream.of(time).map(Integer::parseInt).toArray(Integer[]::new);
+        
+        return LocalDateTime.of(datei[2],datei[0],datei[1], timei[0], timei[1]);
     }
 
 }

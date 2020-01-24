@@ -8,15 +8,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TradeDaoImpl implements TradeDao {
-
+    static Integer id;
     List<Trade> trades;
 
     public TradeDaoImpl() {
         trades = new ArrayList<Trade>();
     }
-
     public List<Trade> getallTrades() {
-
         return trades;
     }
 
@@ -24,7 +22,7 @@ public class TradeDaoImpl implements TradeDao {
         List<Trade> customerSpecificTrades = new ArrayList<Trade>();
         
         getallTrades().forEach((trade)->{
-            if(trade.getCustomerId().equals(customerID))
+            if(trade.getUccCode().equals(customerID))
             customerSpecificTrades.add(trade);
         });
         
@@ -35,7 +33,7 @@ public class TradeDaoImpl implements TradeDao {
         List<Trade> symbolSpecificTrades = new ArrayList<Trade>();
         
         getallTrades().forEach((trade)->{
-            if(trade.getSymbol().equals(symbol))
+            if(trade.getScrip().equals(symbol))
                 symbolSpecificTrades.add(trade);
         });
 
@@ -57,17 +55,18 @@ public class TradeDaoImpl implements TradeDao {
         try {
             Scanner fileReader = new Scanner(tradeFile);
             fileReader.nextLine();
-            while (fileReader.hasNextLine()) {
-                String curTradeString = fileReader.nextLine();
-                String[] tradeInfo = curTradeString.split(",");
-                String customerId = tradeInfo[0];
-                String symbol = tradeInfo[1];
-                Integer qty = Integer.parseInt(tradeInfo[2]);
-                Double rate = Double.parseDouble(tradeInfo[3]);
-                String date = tradeInfo[4];
-                Boolean sttEx = tradeInfo[5].equals("E")?true:false;
-                Boolean gstEx =tradeInfo[6].equals("E")?true:false;
-                this.trades.add(new Trade(customerId, symbol, qty, rate, date, sttEx, gstEx));
+            while (fileReader.hasNextLine()){
+                String[] info = fileReader.nextLine().split(",");
+                Integer id = TradeDaoImpl.id++;
+                String uccCode = info[0];
+                String dateAndTime = info[1];
+                String scrip = info[2];
+                String tradeType=info[3];
+                Integer qty = Integer.parseInt(info[4]);
+                Double rate = Double.parseDouble(info[5]);
+                String stType = info[6];
+                String gstType = info[7];
+                this.trades.add(new Trade(id, uccCode, dateAndTime, scrip, tradeType, qty, rate, stType, gstType));
             }
             fileReader.close();
         } catch (FileNotFoundException fnf) {
@@ -79,7 +78,7 @@ public class TradeDaoImpl implements TradeDao {
     public List<Trade> getTrades(String customerID, String symbol){
         List<Trade> tradesSpeficToCustomerAndSymBol = new ArrayList<Trade>();
         trades.forEach((Trade t)->{
-            if(t.getCustomerId().equals(customerID)&&t.getSymbol().equals(symbol))
+            if(t.getUccCode().equals(customerID)&&t.getScrip().equals(symbol))
                 tradesSpeficToCustomerAndSymBol.add(t);
         });
         return tradesSpeficToCustomerAndSymBol;
@@ -87,8 +86,8 @@ public class TradeDaoImpl implements TradeDao {
 
     public HashMap<String, List<Trade>> getTradeGroups(List<Trade> customerTrades) {;
         HashMap<String, List<Trade>> map = new HashMap<String,List<Trade>>();
-        customerTrades.forEach((Trade trade)->map.put(trade.getSymbol(),null));
-        map.forEach((key,trades)->{map.put(key,getTrades(customerTrades.get(0).getCustomerId(),key));});
+        customerTrades.forEach((Trade trade)->map.put(trade.getScrip(),null));
+        map.forEach((key,trades)->{map.put(key,getTrades(customerTrades.get(0).getUccCode(),key));});
         return map;
     }
 
