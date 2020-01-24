@@ -19,6 +19,7 @@ public class TradeUtils{
 
     public static Boolean isHaveDiffrentRate(List<Trade> list){
         Stream.Builder<Trade> sb = Stream.builder();
+        list.forEach(t->sb.add(t));
         if(sb.build().map(Trade::getRate).distinct().count()>1)
             return true;
         else

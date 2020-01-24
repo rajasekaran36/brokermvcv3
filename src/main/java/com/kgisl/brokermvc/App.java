@@ -1,10 +1,8 @@
 package com.kgisl.brokermvc;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,24 +36,30 @@ public class App
 
         Stream<Trade> allTradesStream = tradesToStream(td.getallTrades());
         String customerId="CITIBNPPARIA";
+        String sym = "INFY";
+        /* 
         Stream<Trade> customerTrades = allTradesStream.filter(t->t.getCustomerId().equals(customerId)).collect(Collectors.toList()).stream();
+        Stream<Trade> cusSymbol = allTradesStream.filter(t->t.getCustomerId().equals(customerId)).filter(s->s.getSymbol().equals(sym)).collect(Collectors.toList()).stream();
+         */
         
-        Supplier<Stream<Trade>> tradeSupplier = ()->customerTrades;
         
-        String[] symbols = tradeSupplier.get().map(Trade::getSymbol).distinct().toArray(String[]::new);
-        
-        Stream.of(symbols).forEach(pcon);
-        String trsym = symbols[0];
-        
-        Stream<Trade> cusSymbol = tradeSupplier.get().filter(s->s.getSymbol().equals(trsym));
+        List<Trade> customerTrades = allTradesStream.filter(t->t.getCustomerId().equals(customerId)).collect(Collectors.toList());
 
-        displayTrades(cusSymbol.collect(Collectors.toList()));
-                
-        if(TradeUtils.isHaveDiffrentRate(cusSymbol.collect(Collectors.toList()))){
-            System.out.println("Weigted Rate");
+        List<Trade> cusSymbol = customerTrades.stream().filter(t->t.getSymbol().equals(sym)).collect(Collectors.toList());
+
+        displayTrades(cusSymbol);
+        
+        if(TradeUtils.isHaveDiffrentRate(cusSymbol)){
+            Double totalAmount = cusSymbol.stream().map(amo->amo.getQty()*amo.getRate()).reduce((t,u)->t+u).get();
+            Integer totalQty = cusSymbol.stream().map(t->t.getQty()).reduce((t,u)->t+u).get();
+            Double weightedAvg = totalAmount/totalQty;
+            System.out.println("Total Qty:"+totalQty);
+            System.out.println("Weighted Avg:"+weightedAvg);
+            totalAmount = cusSymbol.stream().map(amo->amo.getQty()*weightedAvg).reduce((t,u)->t+u).get();
+            System.out.println("Total Amount:"+totalAmount);
         }
         else{
-            System.out.println("Flate Rate");   
+             
         } 
 
 
