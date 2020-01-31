@@ -22,6 +22,13 @@ public class TestBasic{
         return LocalDateTime.of(datei[2],datei[0],datei[1], timei[0], timei[1]);
     }
     public static void main(String[] args) {
-        System.out.println(convertToLocalDateTime("2/27/2015 9:30"));
+        //System.out.println(convertToLocalDateTime("2/27/2015 9:30"));
+        TradeDaoImpl t = new TradeDaoImpl();
+        t.loadTradeInfoFromFile("resources/tradefile-1.csv");
+        BrokerageDaoImpl b = new BrokerageDaoImpl();
+        b.processTrades(t.getallTrades());
+        //b.displayBrokerages();
+        
+        b.printContract(28);
     }
 }

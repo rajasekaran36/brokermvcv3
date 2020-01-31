@@ -40,5 +40,12 @@ public class TradeUtils{
         
         return LocalDateTime.of(datei[2],datei[0],datei[1], timei[0], timei[1]);
     }
-
+    public static Trade getTrade(Integer id){
+        Trade result = null;
+        for(Trade trade:TradeDaoImpl.trades){
+            if(trade.getId()==id)
+                result=trade;
+        }        
+        return result;
+    }
 }

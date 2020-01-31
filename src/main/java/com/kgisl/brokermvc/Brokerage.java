@@ -14,24 +14,36 @@ public class Brokerage {
     private Double brokerage;
     private Double gst;
     private Double st;
+    private Double stampDuty;
+    private Double transactionCharge;
+    private Double sebiCharges;
+
+    public Double getStampDuty() {
+        return this.stampDuty;
+    }
+
+    public void setStampDuty(Double stampDuty) {
+        this.stampDuty = stampDuty;
+    }
+
+    public Double getTransactionCharge() {
+        return this.transactionCharge;
+    }
+
+    public void setTransactionCharge(Double transactionCharge) {
+        this.transactionCharge = transactionCharge;
+    }
+
+    public Double getSebiCharges() {
+        return this.sebiCharges;
+    }
+
+    public void setSebiCharges(Double sebiCharges) {
+        this.sebiCharges = sebiCharges;
+    }
     private Double netamount;
 
     public Brokerage() {
-    }
-
-    public Brokerage(Integer id, String uccCode, LocalDateTime tradeDateAndTime, String scrip, String tradeType, Integer quantity, Double price, Double amount, Double brokerage, Double gst, Double st, Double netamount) {
-        this.id = id;
-        this.uccCode = uccCode;
-        this.tradeDateAndTime = tradeDateAndTime;
-        this.scrip = scrip;
-        this.tradeType = tradeType;
-        this.quantity = quantity;
-        this.price = price;
-        this.amount = amount;
-        this.brokerage = brokerage;
-        this.gst = gst;
-        this.st = st;
-        this.netamount = netamount;
     }
 
     public Brokerage(Integer id, String uccCode, LocalDateTime tradeDateAndTime, String scrip, String tradeType, Integer quantity, Double price) {
@@ -42,7 +54,8 @@ public class Brokerage {
         this.tradeType = tradeType;
         this.quantity = quantity;
         this.price = price;
-    }   
+    }
+
 
     public Integer getId() {
         return this.id;
@@ -141,8 +154,6 @@ public class Brokerage {
     }
 
 
-
-
     @Override
     public String toString() {
         return "{" +
@@ -157,8 +168,12 @@ public class Brokerage {
             ", brokerage='" + getBrokerage() + "'" +
             ", gst='" + getGst() + "'" +
             ", st='" + getSt() + "'" +
+            ", stampDuty='" + getStampDuty() + "'" +
+            ", transactionCharge='" + getTransactionCharge() + "'" +
+            ", sebiCharges='" + getSebiCharges() + "'" +
             ", netamount='" + getNetamount() + "'" +
             "}";
     }
+
 
 }

@@ -9,9 +9,10 @@ import java.util.Scanner;
 
 public class TradeDaoImpl implements TradeDao {
     static Integer id;
-    List<Trade> trades;
+    static List<Trade> trades;
 
     public TradeDaoImpl() {
+        id = 0;
         trades = new ArrayList<Trade>();
     }
     public List<Trade> getallTrades() {
@@ -57,7 +58,7 @@ public class TradeDaoImpl implements TradeDao {
             fileReader.nextLine();
             while (fileReader.hasNextLine()){
                 String[] info = fileReader.nextLine().split(",");
-                Integer id = TradeDaoImpl.id++;
+                TradeDaoImpl.id++;
                 String uccCode = info[0];
                 String dateAndTime = info[1];
                 String scrip = info[2];
@@ -66,7 +67,7 @@ public class TradeDaoImpl implements TradeDao {
                 Double rate = Double.parseDouble(info[5]);
                 String stType = info[6];
                 String gstType = info[7];
-                this.trades.add(new Trade(id, uccCode, dateAndTime, scrip, tradeType, qty, rate, stType, gstType));
+                trades.add(new Trade(id, uccCode, TradeUtils.convertToLocalDateTime(dateAndTime), scrip, tradeType, qty, rate, stType, gstType));
             }
             fileReader.close();
         } catch (FileNotFoundException fnf) {
@@ -84,7 +85,7 @@ public class TradeDaoImpl implements TradeDao {
         return tradesSpeficToCustomerAndSymBol;
     }
 
-    public HashMap<String, List<Trade>> getTradeGroups(List<Trade> customerTrades) {;
+    public HashMap<String, List<Trade>> getTradeGroups(List<Trade> customerTrades) {
         HashMap<String, List<Trade>> map = new HashMap<String,List<Trade>>();
         customerTrades.forEach((Trade trade)->map.put(trade.getScrip(),null));
         map.forEach((key,trades)->{map.put(key,getTrades(customerTrades.get(0).getUccCode(),key));});

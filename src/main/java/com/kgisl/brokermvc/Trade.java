@@ -1,9 +1,11 @@
 package com.kgisl.brokermvc;
 
+import java.time.LocalDateTime;
+
 public class Trade{
     Integer id;
     String uccCode;
-    String dateAndTime;
+    LocalDateTime dateAndTime;
     String scrip;
     String tradeType; //Single Letter String (Buy->B or Sell->S)
     Integer qty;
@@ -16,7 +18,7 @@ public class Trade{
     }
 
 
-    public Trade(Integer id, String uccCode, String dateAndTime, String scrip, String tradeType, Integer qty, Double rate, String stType, String gstType) {
+    public Trade(Integer id, String uccCode, LocalDateTime dateAndTime, String scrip, String tradeType, Integer qty, Double rate, String stType, String gstType) {
         this.id = id;
         this.uccCode = uccCode;
         this.dateAndTime = dateAndTime;
@@ -44,11 +46,11 @@ public class Trade{
         this.uccCode = uccCode;
     }
 
-    public String getDateAndTime() {
+    public LocalDateTime getDateAndTime() {
         return this.dateAndTime;
     }
 
-    public void setDateAndTime(String dateAndTime) {
+    public void setDateAndTime(LocalDateTime dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 
@@ -114,4 +116,5 @@ public class Trade{
             ", gstType='" + getGstType() + "'" +
             "}";
         
+}
 }
