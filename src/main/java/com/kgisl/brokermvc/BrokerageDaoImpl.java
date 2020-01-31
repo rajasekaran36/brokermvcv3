@@ -3,7 +3,7 @@ package com.kgisl.brokermvc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrokerageDaoImpl {
+public class BrokerageDaoImpl implements BrokerageDao{
     private List<Brokerage> brokerages=new ArrayList<Brokerage>();
 
     public void processTrades(List<Trade> trades){
@@ -78,5 +78,11 @@ public class BrokerageDaoImpl {
         }
 
         System.out.println("*******************************************************");
+    }
+
+    public void printAllContracts(){
+        brokerages.forEach(brokerage->{
+            printContract(brokerage.getId());
+        });
     }
 }
