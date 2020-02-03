@@ -18,5 +18,8 @@ public class App{
         System.out.println("Highest Brokerage Paid by Client (CITIBNPPARIA) on: "+b.getHighestBrokeragePaidDayByClient("CITIBNPPARIA"));
 
         System.out.println("Daily Traders: "+b.getDailyTradingUsers().toString());
+
+        System.out.println("Average Buying Price of AXISBANK:"+b.getAverageBuyingPricePerScrip("AXISBANK"));
+        System.out.println("Average Selling Price of AXISBANK:"+b.getAverageSellingPricePerScrip("AXISBANK"));
     }
 }

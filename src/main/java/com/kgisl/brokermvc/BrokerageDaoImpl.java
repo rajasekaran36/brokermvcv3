@@ -234,4 +234,18 @@ public class BrokerageDaoImpl implements BrokerageDao{
         });
         return dailyTraders;
     }
+
+    public Double getAverageBuyingPricePerScrip(String scrip){
+        Double averageBuyingPricePerScrip = 0.0;
+        List<Brokerage> buyScrips = brokerages.stream().filter(brokerage->brokerage.getScrip().equals(scrip)).filter(brokerage->brokerage.getTradeType().equals(("B"))).collect(Collectors.toList());
+        averageBuyingPricePerScrip = buyScrips.stream().map(Brokerage::getPrice).mapToDouble(p->p).sum()/buyScrips.size();
+        return averageBuyingPricePerScrip;
+    }
+
+    public Double getAverageSellingPricePerScrip(String scrip){
+        Double averageSellingPricePerScrip = 0.0;
+        List<Brokerage> sellScrips = brokerages.stream().filter(brokerage->brokerage.getScrip().equals(scrip)).filter(brokerage->brokerage.getTradeType().equals(("S"))).collect(Collectors.toList());
+        averageSellingPricePerScrip = sellScrips.stream().map(Brokerage::getPrice).mapToDouble(p->p).sum()/sellScrips.size();
+        return averageSellingPricePerScrip;
+    }
 }
