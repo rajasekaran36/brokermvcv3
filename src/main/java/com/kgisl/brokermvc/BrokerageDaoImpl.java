@@ -1,7 +1,16 @@
 package com.kgisl.brokermvc;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.Iterator;
 
 public class BrokerageDaoImpl implements BrokerageDao{
     private List<Brokerage> brokerages=new ArrayList<Brokerage>();
@@ -84,5 +93,145 @@ public class BrokerageDaoImpl implements BrokerageDao{
         brokerages.forEach(brokerage->{
             printContract(brokerage.getId());
         });
+    }
+    public List<Brokerage> getAllBrokerages(){
+        return brokerages;
+    }
+
+    public String topBuyScrip() {
+        String topBuyScrip = "";
+        HashMap<String, Integer> countmap = new HashMap<String, Integer>();
+        List<String> buyedScrips = brokerages.stream().filter(brok->brok.getTradeType().equals("B")).map(Brokerage::getScrip).collect(Collectors.toList());
+
+        buyedScrips.forEach(scrip->{
+            Integer count = countmap.get(scrip);
+            if(count!=null){
+                count = count + 1;
+                countmap.put(scrip, count);
+            }
+            else
+                countmap.put(scrip, 1);
+        });
+        Map.Entry<String,Integer> currentEntry = countmap.entrySet().iterator().next();
+        Iterator<Entry<String, Integer>> itr = countmap.entrySet().iterator();
+        Integer max = currentEntry.getValue();
+        topBuyScrip = currentEntry.getKey();
+
+        while(itr.hasNext()){
+            currentEntry = itr.next();
+            if(max<currentEntry.getValue()){
+                max = currentEntry.getValue();
+                topBuyScrip = currentEntry.getKey();
+            }
+        }
+        
+        return topBuyScrip;
+    }
+
+    public String topSellScrip() {
+        String topSellScrip = "";
+        HashMap<String, Integer> countmap = new HashMap<String, Integer>();
+        List<String> soledScrips = brokerages.stream().filter(brok->brok.getTradeType().equals("S")).map(Brokerage::getScrip).collect(Collectors.toList());
+
+        soledScrips.forEach(scrip->{
+            Integer count = countmap.get(scrip);
+            if(count!=null){
+                count = count + 1;
+                countmap.put(scrip, count);
+            }
+            else
+                countmap.put(scrip, 1);
+        });
+        Map.Entry<String,Integer> currentEntry = countmap.entrySet().iterator().next();
+        Iterator<Entry<String,Integer>> itr = countmap.entrySet().iterator();
+        Integer max = currentEntry.getValue();
+        topSellScrip = currentEntry.getKey();
+
+        while(itr.hasNext()){
+            currentEntry = itr.next();
+            if(max<currentEntry.getValue()){
+                max = currentEntry.getValue();
+                topSellScrip = currentEntry.getKey();
+            }
+        }
+        
+        return topSellScrip;
+    }
+
+    public Double totalBrokerage(){
+        return brokerages.stream().map(Brokerage::getBrokerage).mapToDouble(x->x).sum();
+    }
+
+    public Double totalBrokerageForDay(LocalDate date){
+        Double totalBrokofDay = 0.0;
+        List<Brokerage> brokeragesForADay = new ArrayList<Brokerage>();
+        brokerages.forEach(brokerage->{
+            //System.out.println(brokerage.getTradeDateAndTime().toLocalDate()+"---"+date);
+            if(brokerage.getTradeDateAndTime().toLocalDate().equals(date)){
+                brokeragesForADay.add(brokerage);
+            }
+        });
+        totalBrokofDay = brokeragesForADay.stream().map(Brokerage::getBrokerage).mapToDouble(b->b).sum();
+        return totalBrokofDay;
+    }
+
+    public LocalDate getHighestBrokerageCollectionDay(){
+        LocalDate highestBrokerageCollectedOn = LocalDate.now();
+        List<LocalDate> dates = brokerages.stream().map(Brokerage::getTradeDateAndTime).distinct().map(dt->dt.toLocalDate()).collect(Collectors.toList());
+        Double maxCollection = 0.0;
+        for(LocalDate curDate:dates){
+            Double curDayCollection = totalBrokerageForDay(curDate);
+            if(maxCollection<curDayCollection){
+                maxCollection = curDayCollection;
+                highestBrokerageCollectedOn = curDate;
+            }
+        }
+        return highestBrokerageCollectedOn;
+    }
+
+    public Double getTotalBrokerageForAPerson(String uccCode){
+        Double totalBrokerageForAPerson = 0.0;
+        totalBrokerageForAPerson = brokerages.stream().filter(brokerage->brokerage.getUccCode().equals(uccCode)).map(Brokerage::getBrokerage).mapToDouble(b->b).sum();
+        return totalBrokerageForAPerson;
+    }
+
+    public LocalDate getHighestBrokeragePaidDayByClient(String uccCode){
+        LocalDate highestBrokeragePaidDayByClient = LocalDate.now();
+        List<LocalDate> dates = brokerages.stream().filter(brokerage->brokerage.getUccCode().equals(uccCode)).map(Brokerage::getTradeDateAndTime).distinct().map(dt->dt.toLocalDate()).collect(Collectors.toList());
+        Double maxPaymentValue = 0.0;
+        for(LocalDate curDate:dates){
+            Double curDayPaymentValue = totalBrokerageForDay(curDate);
+            if(maxPaymentValue<curDayPaymentValue){
+                maxPaymentValue = curDayPaymentValue;
+                highestBrokeragePaidDayByClient = curDate;
+            }
+        }
+        return highestBrokeragePaidDayByClient;
+    }
+
+    public List<String> getDailyTradingUsers(){
+        List<String> dailyTraders = new ArrayList<String>();
+        HashMap<String,Boolean> dailyTradersMapping = new HashMap<String, Boolean>();
+        HashSet<String> tradersSet = new HashSet<String>();
+        tradersSet.addAll(brokerages.stream().map(Brokerage::getUccCode).distinct().collect(Collectors.toSet()));
+        tradersSet.forEach(code->dailyTradersMapping.put(code,false));
+
+        List<LocalDate> stockMarketActiveDates = brokerages.stream().map(Brokerage::getTradeDateAndTime).map(dt->dt.toLocalDate()).distinct().collect(Collectors.toList());
+        
+        for(String uccCode:tradersSet){
+            stockMarketActiveDates.forEach(date->{
+                List<LocalDate> uccTradedDates = brokerages.stream().filter(brokerage->brokerage.getUccCode().equals(uccCode)).map(Brokerage::getTradeDateAndTime).map(dt->dt.toLocalDate()).distinct().collect(Collectors.toList());
+                //System.out.println(uccTradedDates.toString()+"---"+stockMarketActiveDates.toString());
+                if(uccTradedDates.equals(stockMarketActiveDates))
+                    dailyTradersMapping.put(uccCode, true);
+            });
+        }
+        
+        dailyTradersMapping.forEach((k,v)->{
+            if(v==true){
+                dailyTraders.add(k);
+            }
+        });
+        return dailyTraders;
     }
 }

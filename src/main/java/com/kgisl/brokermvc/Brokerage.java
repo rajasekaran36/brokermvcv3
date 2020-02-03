@@ -17,6 +17,7 @@ public class Brokerage {
     private Double stampDuty;
     private Double transactionCharge;
     private Double sebiCharges;
+    private Double netamount;
 
     public Double getStampDuty() {
         return this.stampDuty;
@@ -41,7 +42,7 @@ public class Brokerage {
     public void setSebiCharges(Double sebiCharges) {
         this.sebiCharges = sebiCharges;
     }
-    private Double netamount;
+    
 
     public Brokerage() {
     }

@@ -1,11 +1,22 @@
 package com.kgisl.brokermvc;
 
+import java.time.LocalDate;
+
 public class App{
     public static void main(String[] args) {
         TradeDaoImpl t = new TradeDaoImpl();
-        t.loadTradeInfoFromFile("resources/tradefile-1.csv");
+        t.loadTradeInfoFromFile("resources/tradefile-2.csv");
         BrokerageDaoImpl b = new BrokerageDaoImpl();
         b.processTrades(t.getallTrades());
         b.printAllContracts();
+        System.out.println("Top Buyed Scrip: "+b.topBuyScrip());
+        System.out.println("Top Soled Scrip: "+b.topSellScrip());
+        System.out.println("Total Brokerage: "+b.totalBrokerage());
+        System.out.println("Total Brokerage on 2015-03-27: "+b.totalBrokerageForDay(LocalDate.parse("2015-03-27")));
+        System.out.println("Highest Brokerage Collected On: "+b.getHighestBrokerageCollectionDay());
+        System.out.println("Total Brokerage For Client (CITIBNPPARIA): "+b.getTotalBrokerageForAPerson("CITIBNPPARIA"));
+        System.out.println("Highest Brokerage Paid by Client (CITIBNPPARIA) on: "+b.getHighestBrokeragePaidDayByClient("CITIBNPPARIA"));
+
+        System.out.println("Daily Traders: "+b.getDailyTradingUsers().toString());
     }
 }

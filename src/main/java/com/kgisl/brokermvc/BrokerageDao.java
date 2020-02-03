@@ -7,5 +7,4 @@ public interface BrokerageDao{
     public void displayBrokerages();
     public void printContract(Integer id);
     public void printAllContracts();
-
 }
