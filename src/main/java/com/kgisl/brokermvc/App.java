@@ -1,6 +1,6 @@
 package com.kgisl.brokermvc;
-
 import java.time.LocalDate;
+
 
 public class App{
     public static void main(String[] args) {
@@ -21,6 +21,7 @@ public class App{
 
         System.out.println("Average Buying Price of AXISBANK:"+b.getAverageBuyingPricePerScrip("AXISBANK"));
         System.out.println("Average Selling Price of AXISBANK:"+b.getAverageSellingPricePerScrip("AXISBANK"));
-        
+        b.getAllBrokerages().forEach(brokerage->DBHelper.pushBrokerage(brokerage));
+        //DBHelper.pushBrokerage(b.getAllBrokerages().get(0));
     }
 }
