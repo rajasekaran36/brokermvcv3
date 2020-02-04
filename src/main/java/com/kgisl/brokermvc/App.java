@@ -8,7 +8,7 @@ public class App{
         t.loadTradeInfoFromFile("resources/tradefile-2.csv");
         BrokerageDaoImpl b = new BrokerageDaoImpl();
         b.processTrades(t.getallTrades());
-        b.printAllContracts();
+        //b.printAllContracts();
         System.out.println("Top Buyed Scrip: "+b.topBuyScrip());
         System.out.println("Top Soled Scrip: "+b.topSellScrip());
         System.out.println("Total Brokerage: "+b.totalBrokerage());
@@ -21,5 +21,6 @@ public class App{
 
         System.out.println("Average Buying Price of AXISBANK:"+b.getAverageBuyingPricePerScrip("AXISBANK"));
         System.out.println("Average Selling Price of AXISBANK:"+b.getAverageSellingPricePerScrip("AXISBANK"));
+        
     }
 }
